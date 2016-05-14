@@ -42,8 +42,8 @@ COPY src /src
 
 # create node log directory and default logs
 RUN mkdir -p var/log/node
-RUN echo "express application logs" > /var/log/node/app.log
-RUN echo "express error logs" > /var/log/node/error.log
+RUN echo "express application logs" > /var/log/node/stdout.log
+RUN echo "express error logs" > /var/log/node/stderr.log
 
 EXPOSE  3001 8089
 

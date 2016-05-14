@@ -4,23 +4,16 @@ var winston = require('winston');
 // Constants
 var PORT = 3001;
 var WLOG = "/var/log/node/express.log";
+var date = new Date();
 
 // Winston Setup
-winston.add(
-  winston.transports.File, {
-    filename: WLOG,
-    level: 'info',
-    json: true,
-    eol: 'n', // for Windows, or `eol: ‘n’,` for *NIX OSs
-    timestamp: true
-  }
-)
+winston.add(winston.transports.File, { filename: WLOG });
 
 // App
 var app = express();
 app.get('/', function (req, res) {
     res.send(req.headers);
-    winston.log(req.headers);
+    winston.log('info', req.headers);
 });
 
 app.listen(PORT);
