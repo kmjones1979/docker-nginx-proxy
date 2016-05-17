@@ -6,11 +6,9 @@ app = Flask(__name__)
 def index():
     if 'x-request-id' in request.headers:
         reqi = request.headers.get('x-request-id')
-        return 'X-Request-ID: ' + reqi
-        for x in request.headers:
-            return x
+        return 'X-Request-ID: ' + reqi + '\n'
     else:
-        return 'Please pass a X-Request-ID header'
+        return 'Please pass a X-Request-ID header\n'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
