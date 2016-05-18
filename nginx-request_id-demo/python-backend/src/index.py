@@ -4,23 +4,24 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    if 'x-request-id' in request.headers:
-        print request.headers
-        print request.environ
+    print request.environ
+    kv = request.headers
+    for k, v in kv.iteritems():
+        print (request.method + ' ' + request.environ.get('PATH_INFO') +
+                ' ' + request.environ.get('SERVER_PROTOCOL') + " " +
+                " ".join(map(lambda (k, v): '%s: "%s"' % (k, v), kv.iteritems())))
         return (request.method + ' ' + request.environ.get('PATH_INFO') +
-                ' ' + request.environ.get('SERVER_PROTOCOL') + '\n' +
-                'User-Agent: ' + request.headers.get('user-agent') + '\n' +
-                'Host: ' + request.headers.get('host') + '\n' +
-                'Accept: ' + request.headers.get('accept') + '\n' +
-                'X-Request-ID: ' + request.headers.get('x-request-id') + '\n')
-    else:
-        print request.headers
-        print request.environ
-        return (request.method + ' ' + request.environ.get('PATH_INFO') +
-                ' ' + request.environ.get('SERVER_PROTOCOL') + '\n' +
-                'User-Agent: ' + request.headers.get('user-agent')  + '\n' +
-                'Host: ' + request.headers.get('host') + '\n' +
-                'Accept: ' + request.headers.get('accept') + '\n')
+                ' ' + request.environ.get('SERVER_PROTOCOL') + " " +
+                " ".join(map(lambda (k, v): '%s: "%s"' % (k, v), kv.iteritems())))
+
+"""
+kv = {}
+
+for k, v in kv.iteritems():
+  print "%s - %s" % (k, v)
+  print "\n".join(map(lambda (k, v): "%s - %s" % (k, v), kv.iteritems())
+
+"""
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
