@@ -5,10 +5,16 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     if 'x-request-id' in request.headers:
-        reqi = request.headers.get('x-request-id')
-        return 'X-Request-ID: ' + reqi + '\n'
+        print request.headers
+        return ('User-Agent:\t ' + request.headers.get('user-agent') + '\n' +
+                'Host:\t\t ' + request.headers.get('host') + '\n' +
+                'Accept:\t\t ' + request.headers.get('accept') + '\n' +
+                'X-Request-ID:\t ' + request.headers.get('x-request-id') + '\n')
     else:
-        return 'Please pass a X-Request-ID header\n'
+        print request.headers
+        return ('User-Agent:\t ' + request.headers.get('user-agent')  + '\n' +
+                'Host:\t\t ' + request.headers.get('host') + '\n' +
+                'Accept:\t\t ' + request.headers.get('accept') + '\n')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
