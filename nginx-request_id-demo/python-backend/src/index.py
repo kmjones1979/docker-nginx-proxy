@@ -3,13 +3,16 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask import request
 
+# application variables
 app = Flask(__name__)
 
-log = '/var/log/python/python.log'
+# logging variables
+logp = '/var/log/python/python.log'
+logf = '[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s'
+logl = logging.INFO
 
 @app.route('/')
 def index():
-    print request.environ
     kv = request.headers
     for k, v in kv.iteritems():
         app.logger.info(request.method + ' ' + request.environ.get('PATH_INFO') +
@@ -21,20 +24,11 @@ def index():
                 request.environ.get('SERVER_PROTOCOL') + " " +
                 " ".join(map(lambda (k, v): '%s: "%s"' % (k, v), kv.iteritems())))
 
-"""
-kv = {}
-
-for k, v in kv.iteritems():
-  print "%s - %s" % (k, v)
-  print "\n".join(map(lambda (k, v): "%s - %s" % (k, v), kv.iteritems())
-
-"""
-
 if __name__ == '__main__':
-    formatter = logging.Formatter("[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
-    handler = RotatingFileHandler(log, maxBytes=10000, backupCount=1)
-    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(logf)
+    handler = RotatingFileHandler(logp, maxBytes=10000, backupCount=1)
+    handler.setLevel(logl)
     handler.setFormatter(formatter)
     app.logger.addHandler(handler)
-    app.logger.setLevel(logging.DEBUG)
-    app.run(host='0.0.0.0')
+    app.logger.setLevel(logl)
+    app.run(host='0.0.0.0', port=5000)
