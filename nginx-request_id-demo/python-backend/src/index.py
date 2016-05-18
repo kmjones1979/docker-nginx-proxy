@@ -8,10 +8,12 @@ def index():
     kv = request.headers
     for k, v in kv.iteritems():
         print (request.method + ' ' + request.environ.get('PATH_INFO') +
-                ' ' + request.environ.get('SERVER_PROTOCOL') + " " +
+                request.environ.get('QUERY_STRING') + ' ' +
+                request.environ.get('SERVER_PROTOCOL') + " " +
                 " ".join(map(lambda (k, v): '%s: "%s"' % (k, v), kv.iteritems())))
         return (request.method + ' ' + request.environ.get('PATH_INFO') +
-                ' ' + request.environ.get('SERVER_PROTOCOL') + " " +
+                request.environ.get('QUERY_STRING') + ' ' +
+                request.environ.get('SERVER_PROTOCOL') + " " +
                 " ".join(map(lambda (k, v): '%s: "%s"' % (k, v), kv.iteritems())))
 
 """
