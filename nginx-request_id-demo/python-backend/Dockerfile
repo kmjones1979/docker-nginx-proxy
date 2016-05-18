@@ -1,5 +1,5 @@
 FROM centos:centos7
-MAINTAINER Kevin Jones <kevin@nginx.com>
+MAINTAINER "Kevin Jones - kevin@nginx.com"
 
 # set environment variables
 ENV SPLUNK_FORWARDER_VERSION 6.2.2
