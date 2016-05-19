@@ -22,10 +22,10 @@ func foo(w http.ResponseWriter, r *http.Request) {
 	// send request headers
 	fmt.Fprintf(w, "%s %s %s\n", r.Method, r.URL, r.Proto)
 	for key, value := range r.Header {
-		fmt.Fprintf(w, "Header [%q] = %q\n", key, value)
+		fmt.Fprintf(w, "[%q]: %q\n", key, value)
 	}
-	fmt.Fprintf(w, "Host = %q\n", r.Host)
-	fmt.Fprintf(w, "RemoteAddr = %q\n", r.RemoteAddr)
+	fmt.Fprintf(w, "Host: %q\n", r.Host)
+	fmt.Fprintf(w, "RemoteAddr: %q\n", r.RemoteAddr)
 	if err := r.ParseForm(); err != nil {
 		log.Print(err)
 	}
