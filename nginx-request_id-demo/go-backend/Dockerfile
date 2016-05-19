@@ -22,6 +22,6 @@ RUN tar -C /usr/local -xzf $tmp/go${GO_VERSION}.${GO_OS}-${GO_ARCH}.tar.gz
 # cleanup
 RUN rm -rf $tmp
 
-EXPOSE 7001 8089
+EXPOSE 6001 8089
 
 CMD ["go", "run", "/usr/local/go/src/hello-world/main.go"]

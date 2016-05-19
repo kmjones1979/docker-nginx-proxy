@@ -15,7 +15,7 @@ type Profile struct {
 func main() {
 	http.HandleFunc("/", foo)
 	http.HandleFunc("/bar", bar)
-	http.ListenAndServe(":9001", nil)
+	http.ListenAndServe(":6001", nil)
 }
 
 func foo(w http.ResponseWriter, r *http.Request) {

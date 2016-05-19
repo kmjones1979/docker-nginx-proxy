@@ -39,6 +39,6 @@ RUN mkdir -p /var/log/python
 # clean up
 RUN yum clean all
 
-EXPOSE 5000 8089
+EXPOSE 5001 8089
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
