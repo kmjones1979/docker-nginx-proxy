@@ -39,7 +39,7 @@ func foo(w http.ResponseWriter, r *http.Request) {
 	for key, value := range r.Header {
 		fmt.Fprintf(w, "%v: %v\n", key, strings.Join(value, ","))
 	}
-	fmt.Fprintf(w, "Host: %v\nRemoteAddr:%v", r.Host, r.RemoteAddr)
+	fmt.Fprintf(w, "Host: %v\nRemoteAddr: %v\n", r.Host, r.RemoteAddr)
 	if err := r.ParseForm(); err != nil {
 		log.Print(err)
 	}
@@ -49,7 +49,7 @@ func foo(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 
 	// log details of the request
-	loggerINFO.Println(r.Method, r.URL, r.Proto, r.Header, "Host: "+r.Host, "RemoteAddr"+r.RemoteAddr)
+	loggerINFO.Println(r.Method, r.URL, r.Proto, r.Header, "Host: "+r.Host, "RemoteAddr: "+r.RemoteAddr)
 }
 
 func bar(w http.ResponseWriter, r *http.Request) {
