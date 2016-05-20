@@ -36,6 +36,7 @@ COPY etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.c
 COPY src /usr/local/go/src
 RUN mkdir -p /usr/local/go/bin
 RUN mkdir -p /usr/local/go/pkg
+RUN mkdir -p /var/log/go/
 
 # download and install go
 RUN mkdir -p $tmp
