@@ -80,6 +80,6 @@ RUN rm -rf $tmp
 # clean up
 RUN yum clean all
 
-EXPOSE 80 443 6001 8080 8089
+EXPOSE 80 443 7001 8080 8089
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
