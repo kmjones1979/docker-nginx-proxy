@@ -1,5 +1,5 @@
 FROM centos:centos7
-MAINTAINER "Kevin Jones - kevin@nginx.com"
+MAINTAINER "Kevin Jones" <kevin@nginx.com>
 
 # environment variables
 ENV GO_VERSION 1.6.2
@@ -10,21 +10,11 @@ ENV PATH /usr/local/go/bin:$PATH
 ENV SPLUNK_FORWARDER_VERSION 6.2.2
 ENV SPLUNK_FORWARDER_BUILD 255606
 ENV SPLUNK_FORWARDER_CENTOS_URL https://download.splunk.com/products/splunk/releases/${SPLUNK_FORWARDER_VERSION}/universalforwarder/linux/splunkforwarder-${SPLUNK_FORWARDER_VERSION}-${SPLUNK_FORWARDER_BUILD}-linux-2.6-x86_64.rpm
-ENV tmp "/tmp/"
-
-# environment
-ARG API_KEY
-
-# install NGINX amplify agent
-RUN curl -L -o amplify-install.sh \
-               https://github.com/nginxinc/nginx-amplify-agent/raw/master/packages/install.sh && \
-               sh ./amplify-install.sh -y || echo "continue..."
-
-RUN rm -f ./amplify-install.sh
 
 # install splunkforwarder
-RUN curl --show-error ${SPLUNK_FORWARDER_CENTOS_URL} -o splunkforwarder.rpm
-RUN rpm -i splunkforwarder.rpm && rm splunkforwarder.rpm
+RUN mkdir -p /tmp/docker/
+RUN curl --show-error ${SPLUNK_FORWARDER_CENTOS_URL} -o /tmp/docker/splunkforwarder.rpm
+RUN rpm -i /tmp/docker/splunkforwarder.rpm
 
 # install supervisord
 RUN yum -y install python-setuptools
@@ -45,12 +35,11 @@ RUN mkdir -p /usr/local/go/pkg
 RUN mkdir -p /var/log/go/
 
 # download and install go
-RUN mkdir -p $tmp
-RUN curl --show-error ${GO_URL} -o $tmp/go${GO_VERSION}.${GO_OS}-${GO_ARCH}.tar.gz
-RUN tar -C /usr/local -xzf $tmp/go${GO_VERSION}.${GO_OS}-${GO_ARCH}.tar.gz
+RUN curl --show-error ${GO_URL} -o /tmp/docker/go${GO_VERSION}.${GO_OS}-${GO_ARCH}.tar.gz
+RUN tar -C /usr/local -xzf /tmp/docker/go${GO_VERSION}.${GO_OS}-${GO_ARCH}.tar.gz
 
 # cleanup
-RUN rm -rf $tmp/*
+RUN rm -rf /tmp/*
 RUN yum clean all
 
 EXPOSE 6001 8089

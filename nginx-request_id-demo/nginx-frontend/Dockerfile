@@ -6,10 +6,15 @@ MAINTAINER "Kevin Jones - kevin@nginx.com"
 ENV SPLUNK_FORWARDER_VERSION 6.2.2
 ENV SPLUNK_FORWARDER_BUILD 255606
 ENV SPLUNK_FORWARDER_CENTOS_URL https://download.splunk.com/products/splunk/releases/${SPLUNK_FORWARDER_VERSION}/universalforwarder/linux/splunkforwarder-${SPLUNK_FORWARDER_VERSION}-${SPLUNK_FORWARDER_BUILD}-linux-2.6-x86_64.rpm
-ENV tmp "/tmp/nginx/src"
 
-# create nginx group and user
-RUN groupadd -r nginx && useradd -r -g nginx nginx
+# environment
+ARG API_KEY
+
+# install NGINX amplify agent
+RUN mkdir -p /tmp/amplify/
+RUN curl -L -o /tmp/amplify/amplify-install.sh \
+               https://github.com/nginxinc/nginx-amplify-agent/raw/master/packages/install.sh
+RUN sh ./tmp/amplify/amplify-install.sh -y || echo "continue..."
 
 # install dependencies
 RUN yum install -y wget gcc gcc-c++ make zlib-devel pcre-devel openssl-devel mercurial epel-release
@@ -32,11 +37,10 @@ RUN mkdir -p /var/log/supervisor
 COPY etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # download nginx source code
-RUN mkdir -p $tmp
-RUN hg clone http://hg.nginx.org/nginx $tmp
+RUN hg clone http://hg.nginx.org/nginx /tmp/nginx/src
 
 # build nginx from source
-RUN cd $tmp && ./auto/configure \
+RUN cd /tmp/nginx/src && ./auto/configure \
     --prefix=/etc/nginx/ \
     --sbin-path=/usr/sbin/nginx \
     --conf-path=/etc/nginx/nginx.conf \
@@ -64,18 +68,13 @@ RUN cd $tmp && ./auto/configure \
     --with-mail_ssl_module \
     --with-file-aio \
     --with-ipv6
-RUN cd $tmp && make && make install
+RUN cd /tmp/nginx/src && make && make install
 
 # copy static Nginx Plus files
 COPY etc/nginx /etc/nginx
 
 # clean up
-RUN rm -rf $tmp
-
-# forward request logs to Docker log collector
-# ***disabled to allow logs to be written inside the container***
-#RUN ln -sf /dev/stdout /var/log/nginx/access.log
-#RUN ln -sf /dev/stderr /var/log/nginx/error.log
+RUN rm -rf /tmp/*
 
 # clean up
 RUN yum clean all
