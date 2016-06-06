@@ -1,7 +1,12 @@
 NAME=nginx-frontend
 TAG=nginx-frontend
 
-all: clean build run
+all: check-key clean build run
+
+check-key:
+ifndef API_KEY
+	$(error API_KEY is undefined)
+endif
 
 build:
 	docker build --build-arg API_KEY=$(API_KEY) -t $(NAME) .
